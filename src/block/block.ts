@@ -2,10 +2,10 @@ import type { BlockData, MineBlockData } from "./block.type.ts";
 import { GENESIS_DATA } from "./config.ts";
 
 class Block implements BlockData {
-  timestamp: string;
+  timestamp: string | Date;
   lastHash: string;
   hash: string;
-  data: string;
+  data: string | any;
 
   constructor({ timestamp, lastHash, hash, data }: BlockData) {
     this.timestamp = timestamp;
@@ -18,7 +18,14 @@ class Block implements BlockData {
     return new Block(GENESIS_DATA);
   }
 
-  static mineBlock({ lastBlock, data }: MineBlockData) {}
+  static mineBlock({ lastBlock, data }: MineBlockData): Block {
+    return new Block({
+      timestamp: new Date().toISOString(),
+      lastHash: lastBlock.hash,
+      data: data,
+      hash: "",
+    });
+  }
 }
 
 export default Block;
