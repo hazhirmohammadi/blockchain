@@ -1,5 +1,6 @@
 import type { BlockData, MineBlockData } from "./block.type.ts";
 import { GENESIS_DATA } from "./config.ts";
+import cryptoHash from "../crypto-hash/crypto-hash.ts";
 
 class Block implements BlockData {
   timestamp: string | Date;
@@ -19,11 +20,14 @@ class Block implements BlockData {
   }
 
   static mineBlock({ lastBlock, data }: MineBlockData): Block {
+    const timestamp = new Date().toISOString();
+    const lastHash = lastBlock.hash;
+
     return new Block({
-      timestamp: new Date().toISOString(),
+      timestamp: timestamp,
       lastHash: lastBlock.hash,
       data: data,
-      hash: "",
+      hash: cryptoHash(timestamp, lastHash, data),
     });
   }
 }

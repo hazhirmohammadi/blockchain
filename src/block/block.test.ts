@@ -1,5 +1,6 @@
 import Block from "./block.ts";
 import { GENESIS_DATA } from "./config.ts";
+import cryptoHash from "../crypto-hash/crypto-hash.ts";
 
 /**
  * Block Test
@@ -66,6 +67,12 @@ describe("Block class", function () {
 
     it("sets the `timestamp` ", () => {
       expect(mineBlock.timestamp).not.toEqual(undefined);
+    });
+
+    it("create a SHA-256 `hash` based on the proper inputs ", () => {
+      expect(mineBlock.hash).toEqual(
+        cryptoHash(mineBlock.timestamp, lastBlock.hash, data),
+      );
     });
   });
 });
