@@ -2,10 +2,13 @@ import Block from "../block/block.ts";
 import Blockchain from "./blockchain.ts";
 
 describe("Blockchain ", function () {
-  let blockchain = new Blockchain();
-
+  let blockchain: Blockchain;
+  let newChain: Blockchain;
+  let originalChain: Block[];
   beforeEach(() => {
     blockchain = new Blockchain();
+    newChain = new Blockchain();
+    originalChain = blockchain.chain;
   });
   it("contains a `chain Array instance ", () => {
     expect(blockchain.chain).toBeInstanceOf(Array);
@@ -21,7 +24,7 @@ describe("Blockchain ", function () {
   });
 
   /**
-   * Validation BlockChain
+   * Validation BlockChain class
    * */
   describe("IsValidChain method() ", function () {
     /***/
@@ -64,6 +67,56 @@ describe("Blockchain ", function () {
       describe("and the chain does not contain any invalid blocks ", function () {
         it("should return true", () => {
           expect(Blockchain.isValidChain(blockchain.chain)).toBe(true);
+        });
+      });
+    });
+  });
+  /**
+   * ReplaceChain for BlockChain class
+   * */
+  describe("replace Chain method()", function () {
+    describe("when the new chain is not longer", function () {
+      it("should does not replace the chain", () => {
+        newChain.chain[0] = {
+          data: "s",
+          hash: "",
+          lastHash: "s",
+          timestamp: "",
+        };
+        blockchain.replaceChain(newChain.chain);
+        expect(blockchain.chain).toEqual(originalChain);
+      });
+    });
+    describe("when the new chain is not longer", function () {
+      it("should does not replace the chain", () => {
+        newChain.chain[0] = {
+          data: "s",
+          hash: "",
+          lastHash: "s",
+          timestamp: "",
+        };
+        blockchain.replaceChain(newChain.chain);
+        expect(blockchain.chain).toEqual(originalChain);
+      });
+    });
+
+    describe("when the new chain is longer", function () {
+      beforeEach(() => {
+        newChain.addBlock({ data: "one" });
+        newChain.addBlock({ data: "two" });
+        newChain.addBlock({ data: "three" });
+      });
+      describe("validation chain is invalid", function () {
+        it(" does not replace the chain", () => {
+          if (newChain.chain[2]) newChain.chain[2].hash = "fake-hash";
+          blockchain.replaceChain(newChain.chain);
+          expect(blockchain.chain).toEqual(originalChain);
+        });
+      });
+      describe("validation chain is valid", function () {
+        it(" ⭕does replace the chain", () => {
+          blockchain.replaceChain(newChain.chain);
+          expect(blockchain.chain).toEqual(newChain.chain);
         });
       });
     });

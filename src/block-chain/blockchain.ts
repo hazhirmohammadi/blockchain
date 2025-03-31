@@ -47,6 +47,20 @@ class Blockchain {
 
     return true;
   }
+
+  public replaceChain(chain: BlockData[]): void {
+    if (chain.length <= this.chain.length) {
+      console.log("the incoming chain must be longer");
+      return;
+    }
+    if (!Blockchain.isValidChain(chain)) {
+      console.log("the incoming chain must be valid");
+      return;
+    }
+
+    console.log("replacing chain with new chain ", chain);
+    this.chain = chain;
+  }
 }
 
 export default Blockchain;
