@@ -1,5 +1,6 @@
 import Block from "../block/block.ts";
-import type {BlockData, MineBlockData} from "../block/block.type.ts";
+import type { BlockData, MineBlockData } from "../block/block.type.ts";
+import cryptoHash from "../crypto-hash/crypto-hash.ts";
 
 class Blockchain {
   chain: BlockData[] = [];
@@ -8,7 +9,7 @@ class Blockchain {
     this.chain = [Block.genesis()];
   }
 
-  public addBlock({ data }: Pick<MineBlockData, "data">) {
+  public addBlock({ data }: Pick<MineBlockData, "data">): void {
     const lastBlock = this.chain[this.chain.length - 1];
 
     if (!lastBlock) {
@@ -20,6 +21,31 @@ class Blockchain {
     });
 
     this.chain.push(newBlock);
+  }
+
+  static isValidChain(chain: BlockData[]): boolean | null {
+    if (chain.length === 0) return null;
+
+    if (JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis())) {
+      return false;
+    }
+    for (let i = 1; i < chain.length; i++) {
+      const block = chain[i];
+      const previousBlock = chain[i - 1];
+
+      if (!block || !previousBlock) continue;
+
+      const { hash, timestamp, data, lastHash } = block;
+
+      if (lastHash !== previousBlock.hash) {
+        return false;
+      }
+      if (hash !== cryptoHash(timestamp, lastHash, data)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
 
