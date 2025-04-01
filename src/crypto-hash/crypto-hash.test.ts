@@ -8,7 +8,7 @@ describe("Crypto", function () {
   });
 
   it("produces the same hash with  the same input in any order   ", () => {
-    expect(cryptoHash("one", "two", "three")).not.toEqual(
+    expect(cryptoHash("one", "two", "three")).toEqual(
       cryptoHash("one", "three", "two"),
     );
   });

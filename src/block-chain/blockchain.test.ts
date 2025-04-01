@@ -35,6 +35,8 @@ describe("Blockchain ", function () {
           hash: "",
           lastHash: "",
           timestamp: "",
+          difficulty:3,
+          nonce:0,
         };
         expect(Blockchain.isValidChain(blockchain.chain)).toBe(false);
       });
@@ -82,6 +84,8 @@ describe("Blockchain ", function () {
           hash: "",
           lastHash: "s",
           timestamp: "",
+          difficulty:3,
+          nonce:0,
         };
         blockchain.replaceChain(newChain.chain);
         expect(blockchain.chain).toEqual(originalChain);
@@ -94,6 +98,8 @@ describe("Blockchain ", function () {
           hash: "",
           lastHash: "s",
           timestamp: "",
+          difficulty:3,
+          nonce:0,
         };
         blockchain.replaceChain(newChain.chain);
         expect(blockchain.chain).toEqual(originalChain);

@@ -35,12 +35,12 @@ class Blockchain {
 
       if (!block || !previousBlock) continue;
 
-      const { hash, timestamp, data, lastHash } = block;
+      const { hash, timestamp, data, lastHash, difficulty, nonce } = block;
 
       if (lastHash !== previousBlock.hash) {
         return false;
       }
-      if (hash !== cryptoHash(timestamp, lastHash, data)) {
+      if (hash !== cryptoHash(timestamp, difficulty, nonce, lastHash, data)) {
         return false;
       }
     }

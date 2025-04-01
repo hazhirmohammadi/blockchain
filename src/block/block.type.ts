@@ -3,6 +3,8 @@ export interface BlockData {
   lastHash: string;
   hash: string;
   data: string | any;
+  difficulty: number;
+  nonce: number;
 }
 
 export interface MineBlockData extends Pick<BlockData, "data"> {

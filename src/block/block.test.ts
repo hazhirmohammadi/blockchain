@@ -13,12 +13,16 @@ describe("Block class", function () {
   const lastHash: string = "foo-hash";
   const hash: string = "hash-code";
   const data: string = "test-data ";
+  const difficulty: number = 1;
+  const nonce: number = 1;
 
   const block = new Block({
     timestamp: timestamp,
     lastHash: lastHash,
     hash: hash,
     data: data,
+    difficulty: difficulty,
+    nonce: nonce,
   });
   /**
    * Input class
@@ -28,6 +32,8 @@ describe("Block class", function () {
     expect(block.lastHash).toEqual(lastHash);
     expect(block.hash).toEqual(hash);
     expect(block.data).toEqual(data);
+    expect(block.difficulty).toEqual(difficulty);
+    expect(block.nonce).toEqual(nonce);
   });
 
   /**
@@ -71,7 +77,18 @@ describe("Block class", function () {
 
     it("create a SHA-256 `hash` based on the proper inputs ", () => {
       expect(mineBlock.hash).toEqual(
-        cryptoHash(mineBlock.timestamp, lastBlock.hash, data),
+        cryptoHash(
+          mineBlock.timestamp,
+          mineBlock.difficulty,
+          mineBlock.nonce,
+          lastBlock.hash,
+          data,
+        ),
+      );
+    });
+    it("sets a `hash` that maces the difficulty criteria", () => {
+      expect(mineBlock.hash.substring(0, mineBlock.difficulty)).toEqual(
+        "0".repeat(mineBlock.difficulty),
       );
     });
   });
