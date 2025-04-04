@@ -1,5 +1,9 @@
-import type { BlockData, MineBlockData } from "./block.type.ts";
-import { GENESIS_DATA } from "./config.ts";
+import type {
+  aJustDifficulty,
+  BlockData,
+  MineBlockData,
+} from "./block.type.ts";
+import { GENESIS_DATA, MINE_RATE } from "./config.ts";
 import cryptoHash from "../crypto-hash/crypto-hash.ts";
 
 class Block implements BlockData {
@@ -33,12 +37,16 @@ class Block implements BlockData {
   static mineBlock({ lastBlock, data }: MineBlockData): Block {
     let hash, timestamp;
     const lastHash: string = lastBlock.hash;
-    const { difficulty } = lastBlock;
+    let { difficulty } = lastBlock;
     let nonce: number = 0;
 
     do {
       nonce++;
-      timestamp = new Date().toISOString();
+      timestamp = Date.now().toString();
+      difficulty = Block.aJustDifficulty({
+        originalBlock: lastBlock,
+        timestamp: Number(timestamp),
+      });
       hash = cryptoHash(timestamp, difficulty, nonce, lastHash, data);
     } while (hash.substring(0, difficulty) !== "0".repeat(difficulty));
 
@@ -50,6 +58,21 @@ class Block implements BlockData {
       difficulty,
       nonce,
     });
+  }
+
+  static aJustDifficulty({
+    originalBlock,
+    timestamp,
+  }: aJustDifficulty): number {
+    const { difficulty } = originalBlock;
+    if (difficulty < 1) return 1;
+    if (timestamp) {
+      if (timestamp - Number(originalBlock.timestamp) > MINE_RATE) {
+        return difficulty - 1;
+      }
+    }
+
+    return difficulty + 1;
   }
 }
 

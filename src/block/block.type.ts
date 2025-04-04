@@ -10,3 +10,8 @@ export interface BlockData {
 export interface MineBlockData extends Pick<BlockData, "data"> {
   lastBlock: BlockData;
 }
+
+export interface aJustDifficulty {
+  originalBlock: BlockData;
+  timestamp?: number;
+}

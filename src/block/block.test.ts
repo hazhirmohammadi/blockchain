@@ -1,5 +1,5 @@
 import Block from "./block.ts";
-import { GENESIS_DATA } from "./config.ts";
+import { GENESIS_DATA, MINE_RATE } from "./config.ts";
 import cryptoHash from "../crypto-hash/crypto-hash.ts";
 
 /**
@@ -9,7 +9,7 @@ describe("Block class", function () {
   /**
    * Fake Data
    * */
-  const timestamp: string = "a-data";
+  const timestamp: string = "2000";
   const lastHash: string = "foo-hash";
   const hash: string = "hash-code";
   const data: string = "test-data ";
@@ -86,10 +86,42 @@ describe("Block class", function () {
         ),
       );
     });
+
     it("sets a `hash` that maces the difficulty criteria", () => {
       expect(mineBlock.hash.substring(0, mineBlock.difficulty)).toEqual(
         "0".repeat(mineBlock.difficulty),
       );
+    });
+
+    it("a just difficulty", () => {
+      const possibleResults: Array<number> = [
+        lastBlock.difficulty + 1,
+        lastBlock.difficulty - 1,
+      ];
+      expect(possibleResults.includes(mineBlock.difficulty)).toBe(true);
+    });
+  });
+
+  describe("A just difficulty method()", function () {
+    it("raises the difficulty for a quickly mine block ", () => {
+      expect(
+        Block.aJustDifficulty({
+          originalBlock: block,
+          timestamp: Number(block.timestamp) + MINE_RATE - 100,
+        }),
+      ).toEqual(block.difficulty + 1);
+    });
+    it("lowers the difficulty for a  slowly mine block ", () => {
+      expect(
+        Block.aJustDifficulty({
+          originalBlock: block,
+          timestamp: Number(block.timestamp) + MINE_RATE + 100,
+        }),
+      ).toEqual(block.difficulty - 1);
+    });
+    it("has lower limit of 1 ", () => {
+      block.difficulty = -1;
+      expect(Block.aJustDifficulty({ originalBlock: block ,}));
     });
   });
 });
