@@ -1,6 +1,7 @@
 import Block from "./block.ts";
 import { GENESIS_DATA, MINE_RATE } from "./config.ts";
 import cryptoHash from "../crypto-hash/crypto-hash.ts";
+import hexToBinary from "../hex-to-binary/hex-to-binary.ts";
 
 /**
  * Block Test
@@ -88,9 +89,9 @@ describe("Block class", function () {
     });
 
     it("sets a `hash` that maces the difficulty criteria", () => {
-      expect(mineBlock.hash.substring(0, mineBlock.difficulty)).toEqual(
-        "0".repeat(mineBlock.difficulty),
-      );
+      expect(
+        hexToBinary(mineBlock.hash).substring(0, mineBlock.difficulty),
+      ).toEqual("0".repeat(mineBlock.difficulty));
     });
 
     it("a just difficulty", () => {
@@ -121,7 +122,7 @@ describe("Block class", function () {
     });
     it("has lower limit of 1 ", () => {
       block.difficulty = -1;
-      expect(Block.aJustDifficulty({ originalBlock: block ,}));
+      expect(Block.aJustDifficulty({ originalBlock: block }));
     });
   });
 });

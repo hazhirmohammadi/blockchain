@@ -5,6 +5,7 @@ import type {
 } from "./block.type.ts";
 import { GENESIS_DATA, MINE_RATE } from "./config.ts";
 import cryptoHash from "../crypto-hash/crypto-hash.ts";
+import hexToBinary from "../hex-to-binary/hex-to-binary.ts";
 
 class Block implements BlockData {
   public timestamp: string | Date;
@@ -48,7 +49,9 @@ class Block implements BlockData {
         timestamp: Number(timestamp),
       });
       hash = cryptoHash(timestamp, difficulty, nonce, lastHash, data);
-    } while (hash.substring(0, difficulty) !== "0".repeat(difficulty));
+    } while (
+      hexToBinary(hash).substring(0, difficulty) !== "0".repeat(difficulty)
+    );
 
     return new Block({
       timestamp: timestamp,
@@ -77,3 +80,4 @@ class Block implements BlockData {
 }
 
 export default Block;
+
