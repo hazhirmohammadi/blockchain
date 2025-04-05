@@ -1,5 +1,5 @@
-import Blockchain from "./block-chain/blockchain.ts";
-import block from "./block/block.ts";
+import Blockchain from "./core/block-chain/blockchain.ts";
+import block from "./core/block/block.ts";
 
 class AverageWork extends Blockchain {
   constructor() {
@@ -17,6 +17,7 @@ class AverageWork extends Blockchain {
     this.addBlock({ data: "Initial Block" });
      console.log("first Block 📒:",this.chain[this.chain.length-1])
     for (let i = 0; i < 100; i++) {
+       //@ts-ignore
       prevTimestamp = this.chain[this.chain.length - 1]?.timestamp;
       this.addBlock({ data: `block--${i}` });
       nextBlock = this.chain[this.chain.length - 1];
