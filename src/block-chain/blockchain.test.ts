@@ -1,5 +1,6 @@
 import Block from "../block/block.ts";
 import Blockchain from "./blockchain.ts";
+import cryptoHash from "../crypto-hash/crypto-hash.ts";
 
 describe("Blockchain ", function () {
   let blockchain: Blockchain;
@@ -35,8 +36,8 @@ describe("Blockchain ", function () {
           hash: "",
           lastHash: "",
           timestamp: "",
-          difficulty:3,
-          nonce:0,
+          difficulty: 3,
+          nonce: 0,
         };
         expect(Blockchain.isValidChain(blockchain.chain)).toBe(false);
       });
@@ -71,6 +72,38 @@ describe("Blockchain ", function () {
           expect(Blockchain.isValidChain(blockchain.chain)).toBe(true);
         });
       });
+
+      describe("and the chain contains block with a jumped difficulty ", function () {
+        it("return in false ", () => {
+          const lastBlock = blockchain.chain[blockchain.chain.length - 1];
+          // @ts-ignore
+          if (lastBlock) {
+            const lastHash = lastBlock.hash;
+            const timestamp = Date.now().toString();
+            const nonce = 0;
+            const data = "";
+            const difficulty = lastBlock.difficulty - 3;
+            const hash = cryptoHash(
+              timestamp,
+              lastHash,
+              difficulty,
+              nonce,
+              data,
+            );
+            const badBlock = new Block({
+              timestamp,
+              lastHash,
+              hash,
+              nonce,
+              difficulty,
+              data,
+            });
+            blockchain.chain.push(badBlock);
+
+            expect(Blockchain.isValidChain(blockchain.chain)).toBe(false);
+          }
+        });
+      });
     });
   });
   /**
@@ -84,8 +117,8 @@ describe("Blockchain ", function () {
           hash: "",
           lastHash: "s",
           timestamp: "",
-          difficulty:3,
-          nonce:0,
+          difficulty: 3,
+          nonce: 0,
         };
         blockchain.replaceChain(newChain.chain);
         expect(blockchain.chain).toEqual(originalChain);
@@ -98,8 +131,8 @@ describe("Blockchain ", function () {
           hash: "",
           lastHash: "s",
           timestamp: "",
-          difficulty:3,
-          nonce:0,
+          difficulty: 3,
+          nonce: 0,
         };
         blockchain.replaceChain(newChain.chain);
         expect(blockchain.chain).toEqual(originalChain);
