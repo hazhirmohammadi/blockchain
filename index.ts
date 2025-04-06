@@ -3,12 +3,19 @@ import type { ServeOptions } from "bun";
 
 import Blockchain from "./src/core/block-chain/blockchain.ts";
 import type { BlockData } from "./src/core/block/block.type.ts";
+import PubSub from "./src/redis/pubSub.ts";
 
 class Server {
-  private blockChain: Blockchain;
+  private readonly blockChain: Blockchain;
+  private readonly pubSub: PubSub;
 
   constructor() {
     this.blockChain = new Blockchain();
+    this.pubSub = new PubSub(this.blockChain);
+
+    setTimeout(() => {
+      this.pubSub.broadcastChain();
+    }, 1000);
   }
 
   public init(port: number) {
