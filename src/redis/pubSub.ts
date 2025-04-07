@@ -10,10 +10,10 @@ export enum Channels {
 class PubSub {
   public publisher: Redis;
   public subscriber: Redis;
-  public blockchain: Blockchain;
+  private readonly blockchain: Blockchain;
 
-  constructor() {
-    this.blockchain = new Blockchain();
+  constructor(blockChain: Blockchain) {
+    this.blockchain = blockChain;
     this.publisher = new Redis();
     this.subscriber = new Redis();
 

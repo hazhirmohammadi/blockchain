@@ -80,4 +80,3 @@ class Block implements BlockData {
 }
 
 export default Block;
-

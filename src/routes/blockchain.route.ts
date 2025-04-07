@@ -16,7 +16,6 @@ export const blockchainRoutes: Record<string, RouteHandler> = {
 //         this.port = port;
 //         this.routes = {
 //             ...blockchainRoutes,
-//             // در آینده روت‌های دیگر هم اضافه میشه
 //         };
 //     }
 //

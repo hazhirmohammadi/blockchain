@@ -11,6 +11,7 @@ class Server {
 
   constructor() {
     this.blockChain = new Blockchain();
+
     this.pubSub = new PubSub(this.blockChain);
 
     setTimeout(() => {
