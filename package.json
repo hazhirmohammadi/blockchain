@@ -7,7 +7,7 @@
     "dev": "bun run index.ts",
     "wacth": "bun --watch index.ts",
     "start": "bun run index.ts",
-    "redis": "bun run /src/redis/pubSub.ts",
+    "redis": "bun --watch /src/redis/pubSub.ts",
     "build": "tsc",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
@@ -23,7 +23,9 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@types/tcp-port-used": "^1.0.4",
     "figlet": "^1.8.0",
-    "ioredis": "^5.6.0"
+    "ioredis": "^5.6.0",
+    "tcp-port-used": "^1.0.2"
   }
 }

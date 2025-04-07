@@ -1,4 +1,5 @@
 import { serve } from "bun";
+import tcpPortUsed from "tcp-port-used";
 
 import Blockchain from "./src/core/block-chain/blockchain.ts";
 import PubSub from "./src/redis/pubSub.ts";
@@ -8,9 +9,6 @@ import { blockchainRoutes } from "./src/routes/blockchain.route.ts";
 class Server {
   public readonly port: number;
 
-  private readonly blockChain: Blockchain;
-  public pubSub: PubSub;
-
   private readonly routes: {
     method: string;
     path: string;
@@ -18,11 +16,11 @@ class Server {
   }[];
 
   constructor(port: number) {
-    this.blockChain = new Blockchain();
-    this.pubSub = new PubSub(this.blockChain);
-
     this.port = port;
 
+    // setTimeout(() => {
+    //   this.pubSub.broadcastChain();
+    // }, 1000);
     this.routes = [...blockchainRoutes];
   }
 
@@ -53,7 +51,14 @@ class Server {
   }
 }
 
-Server.init(3000);
+let PORT: number = 3000;
+
+tcpPortUsed.check(PORT, "127.0.0.1").then(function (isUse: boolean) {
+  if (isUse) PORT += Math.ceil(Math.random() * 1000);
+  Server.init(PORT);
+});
+
+
 
 // class Server {
 //   private readonly blockChain: Blockchain;
