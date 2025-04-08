@@ -1,14 +1,13 @@
 import { serve } from "bun";
 import tcpPortUsed from "tcp-port-used";
 
-import Blockchain from "./src/core/block-chain/blockchain.ts";
-import PubSub from "./src/redis/pubSub.ts";
 import type { RouteHandler } from "./src/types/route.type.ts";
 import { blockchainRoutes } from "./src/routes/blockchain.route.ts";
 
+import BlockchainService from "./src/services/blockchain.service.ts";
+
 class Server {
   public readonly port: number;
-
   private readonly routes: {
     method: string;
     path: string;
@@ -17,10 +16,6 @@ class Server {
 
   constructor(port: number) {
     this.port = port;
-
-    // setTimeout(() => {
-    //   this.pubSub.broadcastChain();
-    // }, 1000);
     this.routes = [...blockchainRoutes];
   }
 
@@ -52,68 +47,10 @@ class Server {
 }
 
 let PORT: number = 3000;
+const blockchainService = new BlockchainService();
 
 tcpPortUsed.check(PORT, "127.0.0.1").then(function (isUse: boolean) {
   if (isUse) PORT += Math.ceil(Math.random() * 1000);
+  if (PORT !== blockchainService.rootPort) blockchainService.syncChains();
   Server.init(PORT);
 });
-
-
-
-// class Server {
-//   private readonly blockChain: Blockchain;
-//   private readonly pubSub: PubSub;
-//
-//   constructor() {
-//     this.blockChain = new Blockchain();
-//
-//     this.pubSub = new PubSub(this.blockChain);
-//
-//     setTimeout(() => {
-//       this.pubSub.broadcastChain();
-//     }, 1000);
-//   }
-//
-//   public init(port: number) {
-//     const option: ServeOptions = {
-//       port: port,
-//       fetch: this.router.bind(this),
-//     };
-//     serve(option);
-//   }
-//
-//   private async router(req: Request): Promise<Response> {
-//     const url = new URL(req.url);
-//     const path = url.pathname;
-//     const method = req.method;
-//
-//     if (method === "GET" && path === "/api/blocks") {
-//       return this.getBlocks();
-//     }
-//
-//     if (method === "POST" && path === "/api/mine") {
-//       const body = await req.json();
-//       //@ts-ignore
-//       const data = body?.data;
-//
-//       return this.mineBlock(data);
-//     }
-//
-//     return new Response("Not Found", { status: 404 });
-//   }
-//
-//   private getBlocks(): Response {
-//     return new Response(JSON.stringify(this.blockChain.chain), {
-//       headers: { "Content-Type": "application/json" },
-//     });
-//   }
-//
-//   private mineBlock(data: BlockData): Response {
-//     this.blockChain.addBlock({ data });
-//
-//     return new Response(JSON.stringify(this.blockChain.chain), {
-//       status: 201,
-//       headers: { "Content-Type": "application/json", Location: "/api/blocks" },
-//     });
-//   }
-// }
