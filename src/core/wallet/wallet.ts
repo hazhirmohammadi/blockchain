@@ -1,10 +1,10 @@
 import { STARTING_BALANCE } from "./config.ts";
-const secp256k1 = require("../utils/elliptic.ts");
 import type { IWallet } from "./wallet.type.ts";
 import cryptoHash from "../utils/crypto-hash/crypto-hash.ts";
+import {secp} from "../utils/elliptic.ts";
 
 class Wallet implements IWallet {
-  private readonly keyPair = secp256k1.genKeyPair();
+  private readonly keyPair = secp.genKeyPair();
   public balance = STARTING_BALANCE;
   public publicKey: string;
 

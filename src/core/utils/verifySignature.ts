@@ -1,8 +1,8 @@
-const secp256k1 = require("../utils/elliptic");
 import cryptoHash from "./crypto-hash/crypto-hash.ts";
 import type { ec } from "elliptic";
-type Signature = ec.Signature;
+import { secp } from "./elliptic.ts";
 
+type Signature = ec.Signature;
 
 interface verifySignature {
   publicKey: string;
@@ -10,8 +10,12 @@ interface verifySignature {
   signature: Signature;
 }
 
-export const verifySignature = ({ publicKey, data, signature }:verifySignature) => {
-  const keyFromPublic = secp256k1.keyFromPublic(publicKey, "hex");
+export const verifySignature = ({
+  publicKey,
+  data,
+  signature,
+}: verifySignature) => {
+  const keyFromPublic = secp.keyFromPublic(publicKey, "hex");
   const hashData = cryptoHash(data);
   return keyFromPublic.verify(hashData, signature);
 };

@@ -1,6 +1,8 @@
-// TODO: fix this error in tests
-const elliptic = require("elliptic").ec;
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const elliptic = require("elliptic");
 
-const secp256k1 = new elliptic("secp256k1");
+const EC = elliptic.ec;
+const secp256k1 = new EC("secp256k1");
 
-module.exports = secp256k1;
+export const secp = secp256k1;

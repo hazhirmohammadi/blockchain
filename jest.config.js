@@ -2,6 +2,9 @@ export default {
   preset: "ts-jest",
   testEnvironment: "node",
   extensionsToTreatAsEsm: [".ts"],
+  transformIgnorePatterns: [
+    "node_modules/(?!elliptic)/"
+  ],
   transform: {
     "^.+\\.ts$": [
       "ts-jest",

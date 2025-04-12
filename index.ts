@@ -5,10 +5,12 @@ import type { RouteHandler } from "./src/types/route.type.ts";
 import { blockchainRoutes } from "./src/routes/blockchain.route.ts";
 
 import BlockchainService from "./src/services/blockchain.service.ts";
-const secp256k1 = require("./src/core/utils/elliptic.ts");
+
 import cryptoHash from "./src/core/utils/crypto-hash/crypto-hash.ts";
 
 import { verifySignature } from "./src/core/utils/verifySignature.ts";
+import {secp} from "./src/core/utils/elliptic.ts";
+
 
 class Server {
   public readonly port: number;
@@ -63,7 +65,7 @@ tcpPortUsed.check(PORT, "127.0.0.1").then(function (isUse: boolean) {
 /*
 * test
 * */
-const keyPair = secp256k1.genKeyPair();
+const keyPair = secp.genKeyPair();
 const data = "hello world!";
 const hashData = cryptoHash(data);
 
