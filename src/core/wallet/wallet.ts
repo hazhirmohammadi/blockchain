@@ -5,7 +5,7 @@ import cryptoHash from "../utils/crypto-hash/crypto-hash.ts";
 
 class Wallet implements IWallet {
   private readonly keyPair = secp256k1.genKeyPair();
-  public startingBalance = STARTING_BALANCE;
+  public balance = STARTING_BALANCE;
   public publicKey: string;
 
   constructor() {

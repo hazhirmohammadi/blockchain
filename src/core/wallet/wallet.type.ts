@@ -1,4 +1,4 @@
 export interface IWallet {
-    startingBalance: number;
+    balance: number;
     publicKey: string;
 }
