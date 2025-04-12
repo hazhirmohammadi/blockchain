@@ -5,6 +5,10 @@ import type { RouteHandler } from "./src/types/route.type.ts";
 import { blockchainRoutes } from "./src/routes/blockchain.route.ts";
 
 import BlockchainService from "./src/services/blockchain.service.ts";
+const secp256k1 = require("./src/core/utils/elliptic.ts");
+import cryptoHash from "./src/core/utils/crypto-hash/crypto-hash.ts";
+
+import { verifySignature } from "./src/core/utils/verifySignature.ts";
 
 class Server {
   public readonly port: number;
@@ -54,3 +58,23 @@ tcpPortUsed.check(PORT, "127.0.0.1").then(function (isUse: boolean) {
   if (PORT !== blockchainService.rootPort) blockchainService.syncChains();
   Server.init(PORT);
 });
+
+
+/*
+* test
+* */
+const keyPair = secp256k1.genKeyPair();
+const data = "hello world!";
+const hashData = cryptoHash(data);
+
+const publicKey = keyPair.getPublic().encode("hex", false);
+
+const signature = keyPair.sign(hashData);
+
+const grs = verifySignature({
+  publicKey: publicKey,
+  data: data,
+  signature: signature,
+});
+
+console.log("isValidSignature", grs);

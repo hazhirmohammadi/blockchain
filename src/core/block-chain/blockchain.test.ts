@@ -1,6 +1,6 @@
 import Block from "../block/block.ts";
 import Blockchain from "./blockchain.ts";
-import cryptoHash from "../crypto-hash/crypto-hash.ts";
+import cryptoHash from "../utils/crypto-hash/crypto-hash.ts";
 
 describe("Blockchain ", function () {
   let blockchain: Blockchain;

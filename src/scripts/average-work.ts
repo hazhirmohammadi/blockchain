@@ -1,5 +1,5 @@
-import Blockchain from "./core/block-chain/blockchain.ts";
-import block from "./core/block/block.ts";
+import Blockchain from "../core/block-chain/blockchain.ts";
+import block from "../core/block/block.ts";
 
 class AverageWork extends Blockchain {
   constructor() {

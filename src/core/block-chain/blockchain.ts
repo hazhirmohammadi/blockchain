@@ -1,6 +1,6 @@
 import Block from "../block/block.ts";
 import type { BlockData, MineBlockData } from "../block/block.type.ts";
-import cryptoHash from "../crypto-hash/crypto-hash.ts";
+import cryptoHash from "../utils/crypto-hash/crypto-hash.ts";
 
 class Blockchain {
   chain: BlockData[] = [];

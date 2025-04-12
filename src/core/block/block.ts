@@ -4,8 +4,8 @@ import type {
   MineBlockData,
 } from "./block.type.ts";
 import { GENESIS_DATA, MINE_RATE } from "./config.ts";
-import cryptoHash from "../crypto-hash/crypto-hash.ts";
-import hexToBinary from "../hex-to-binary/hex-to-binary.ts";
+import cryptoHash from "../utils/crypto-hash/crypto-hash.ts";
+import hexToBinary from "../utils/hex-to-binary/hex-to-binary.ts";
 
 /**
  * Represents a block in the blockchain.
