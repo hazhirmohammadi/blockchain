@@ -43,7 +43,7 @@ class Transaction implements ITransaction {
     };
   }
 
-  static validTransaction(transaction: Transaction) {
+  static validTransaction(transaction: Transaction): boolean {
     const {
       outputMap,
       input: { address, amount, signature },
